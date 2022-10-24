@@ -21,11 +21,23 @@ def freq_by_centuries(file):
     return
 
 
-file = open("processos.txt", "r")
-dic = freq_by_years(file)
+def freq_by_relationship(file):
 
-for key in sorted(dic.keys()):
-    print(str(key) + ": " + str(len(dic[key])))
+    for line in file:
+        slices = re.split(r'[:{2,4}\-{1}.{1}]', line)
+        print(slices)
+        #for s in slices:
+         #   match = re.fullmatch(r'(\w+| )', s)
+
+    return
+
+
+file = open("processos.txt", "r")
+freq_by_relationship(file)
+#dic = freq_by_years(file)
+
+#for key in sorted(dic.keys()):
+ #   print(str(key) + ": " + str(len(dic[key])))
 
 
 
