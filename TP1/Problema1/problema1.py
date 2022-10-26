@@ -20,49 +20,51 @@ def freq_by_years(file):
     return dic_by_years
 
 
-def getFirstName(person, dic, year):
+def getFirstName(person, dic, century):
     firstName = re.split(r'\s+', person)
-    if re.fullmatch(r'[A-Z][a-z]+', firstName[-1]):
-        if firstName[-1] not in dic[year].keys():
-            dic[year][firstName[-1]] = 0
-        dic[year][firstName[-1]] += 1
+    if re.fullmatch(r'[A-Z][a-z]+', firstName[0]):
+        if firstName[0] != '':
+            if firstName[0] not in dic[century].keys():
+                dic[century][firstName[0]] = 0
+            dic[century][firstName[0]] += 1
 
     return 0
 
 
-def getLastName(person, dic, year):
+def getLastName(person, dic, century):
     lastName = re.split(r'\s+\n+', person)
     if re.fullmatch(r'[A-Z][a-z]+', lastName[-1]):
-        if lastName[-1] not in dic[year].keys():
-            dic[year][lastName[-1]] = 0
-        dic[year][lastName[-1]] += 1
+        if lastName[-1] != '':
+            if lastName[-1] not in dic[century].keys():
+                dic[century][lastName[-1]] = 0
+            dic[century][lastName[-1]] += 1
 
     return 0
 
 
-#EXISTEM CASOS A SER IGNORADOS
 def freq_by_centuries(file):
 
     dic_by_centuries = {}
     for line in file:
+        #lista que contém a linha particionada pelo padrão do split
         slices = re.split(r'::|,|\.', line)
-        print(slices)
+        #este if serve apenas para ignorar linhas que estejam "inválidas"
         if len(slices) >= 2:
+            #este split particiona a data
             date = re.split(r'-', slices[1])
+            century = math.ceil(int(date[0])/100)
+            if century not in dic_by_centuries.keys():
+                dic_by_centuries[century] = {}
             
-            if date[0] not in dic_by_centuries.keys():
-                dic_by_centuries[date[0]] = {}
-            
+            #nas posições 3 e 4 de slices encontram-se os nomes que queremos manipular
             dad = slices[3]
             mom = slices[4]
-            getFirstName(dad, dic_by_centuries, date[0])
-            getLastName(dad, dic_by_centuries, date[0])
-            getFirstName(mom, dic_by_centuries, date[0])
-            getLastName(mom, dic_by_centuries, date[0])
+            getFirstName(dad, dic_by_centuries, century)
+            getLastName(dad, dic_by_centuries, century)
+            getFirstName(mom, dic_by_centuries, century)
+            getLastName(mom, dic_by_centuries, century)
 
-    print(dic_by_centuries)
-
-    return
+    return dic_by_centuries
 
 
 '''def freq_by_relationship(file):
@@ -82,12 +84,16 @@ def freq_by_centuries(file):
 
 
 file = open("processos.txt", "r")
-freq_by_centuries(file)
+dic = freq_by_centuries(file)
 #dic = freq_by_years(file)
 
-#for key in sorted(dic.keys()):
- #   print(str(key) + ": " + str(len(dic[key])))
-
+for century in sorted(dic.keys()):
+    print("Século: " + str(century))
+    
+    for name in dic[century].keys():
+        print(name + ": " + str(dic[century][name]))
+    
+    print("\n")
 
 
 
