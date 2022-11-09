@@ -4,7 +4,7 @@ import re
 def distribuicao_genero():
     dic = {}
 
-    with open(file, 'r') as myfile:
+    with open("emd.csv", 'r') as myfile:
     	next(myfile)
     	for line in myfile:
 	        slices = re.split(r',',line)
@@ -25,7 +25,7 @@ def distribuicao_idade():
 	dic = {}
 	dic["<35"] = 0
 	dic[">35"] = 0
-	with open(file, 'r') as myfile:
+	with open("emd.csv", 'r') as myfile:
 		next(myfile)
 		for line in myfile:
 			slices = re.split(r',', line)
@@ -39,7 +39,6 @@ def distribuicao_idade():
 	return dic
 
 
-file = "emd.csv"
-dic_genero = distribuicao_genero()
-dic_idade = distribuicao_idade()
-print(dic_idade)
+#dic_genero = distribuicao_genero()
+#dic_idade = distribuicao_idade()
+#print(dic_idade)

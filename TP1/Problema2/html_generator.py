@@ -7,15 +7,100 @@ import json
 import re
 
 
+def list_to_string(x):
+	string = "<p>"
+
+	for elem in x:
+		string += elem + "; "
+	string += """</p><br></br>"""
+
+	return string
+
+
 def generate_pagina_indicador(char):
 	with open("pagina_indicador_"+char+".html", "w") as file:
-		content ="""<!DOCTYPE html>
-					<html>
-					<h1>Página do indicador</h1>
-					<body>
-					<li><a href="index.html">Página principal</a></li>
-					</body>
-					</html>"""
+		content = ""
+
+		if char == 'a':
+			content ="""<!DOCTYPE html>
+						<html>
+						<h1>Página do indicador</h1>
+						<body>
+						<li><a href="index.html">Página principal</a></li>
+						-datas-
+						</body>
+						</html>"""
+
+			string = "<h3>Datas existentes nos registos (ordenadas por ordem crescente):</h3>"
+			datas = a.lista_datas()
+			
+			for data in datas:
+				string += "<p>" + str(data[0]) + "-" + str(data[1]) + "-" + str(data[2]) + "</p>"
+
+			content = re.sub(r'-datas-', string, content)
+
+		elif char == 'b':
+			content ="""<!DOCTYPE html>
+						<html>
+						<h1>Página do indicador</h1>
+						<body>
+						<li><a href="index.html">Página principal</a></li>
+						-modalidade-
+						</body>
+						</html>"""
+
+			dic = b.lista_anos_modalidades()
+			string = "<h3>Atletas de cada modalidade ordenados por ano:</h3>"
+
+			for ano in sorted(dic.keys()):
+				string += "<p>" + ano + "</p><br>"
+				for modalidade in sorted(dic[ano].keys()):
+					string += "<p>" + modalidade + ": {"
+					for atleta in sorted(dic[ano][modalidade]):
+						string += atleta  + "; "
+					string += "}</p>"
+				string += "<br></br>"
+
+			content = re.sub(r'-modalidade-', string, content)
+
+
+		elif char == 'c':
+			content ="""<!DOCTYPE html>
+						<html>
+						<h1>Página do indicador</h1>
+						<body>
+						<li><a href="index.html">Página principal</a></li>
+						</body>
+						</html>"""
+
+		elif char == 'd':
+			content ="""<!DOCTYPE html>
+						<html>
+						<h1>Página do indicador</h1>
+						<body>
+						<li><a href="index.html">Página principal</a></li>
+						-moradas-
+						</body>
+						</html>"""
+
+			string = """<h3>Moradas existentes e respetivos moradores (nome, modalidade que pratica):</h3>"""
+			moradas = d.lista_moradas()
+
+			for morada in moradas:
+				string += "<p>" + morada + ": " + d.atletas_por_morada(morada) + "</p>"
+				string += "<br>"
+
+			content = re.sub(r'-moradas-', string, content)
+
+
+		elif char == 'e':
+			content ="""<!DOCTYPE html>
+						<html>
+						<h1>Página do indicador</h1>
+						<body>
+						<li><a href="index.html">Página principal</a></li>
+						</body>
+						</html>"""
 
 		file.write(content)
 
@@ -38,7 +123,7 @@ def html_a():
 def html_b():
 	generate_pagina_indicador("b")
 
-	content = """<h3>Distribuição por modalidade em cada ano e no total:</h3>
+	content = """<h3>B - Distribuição por modalidade em cada ano e no total:</h3>
 				<li><a href="pagina_indicador_b.html">Página do Indicador</a></li>
 				<p>-ano-</p>
 				<p>-total-</p>
@@ -70,7 +155,7 @@ def html_b():
 def html_c():
 	generate_pagina_indicador("c")
 
-	content = """<h3>Distribuição por idade e género (para a idade, considera apenas 2 escalões: < 35 anos e >= 35):</h3>
+	content = """<h3>C - Distribuição por idade e género (para a idade, considera apenas 2 escalões: < 35 anos e >= 35):</h3>
 				<li><a href="pagina_indicador_c.html">Página do Indicador</a></li>
 				<p>-genero-</p>
 				<p>-idade-</p>
@@ -91,7 +176,7 @@ def html_c():
 def html_d():
 	generate_pagina_indicador("d")
 
-	content = """<h3>Distribuição por morada:</h3>
+	content = """<h3>D - Distribuição por morada:</h3>
 				<li><a href="pagina_indicador_d.html">Página do Indicador</a></li>
 				<p>-morada-</p>
 				<br></br>"""
@@ -107,7 +192,7 @@ def html_d():
 def html_e():
 	generate_pagina_indicador("e")
 
-	content = """<h3>Percentagem de aptos e não aptos por ano:</h3>
+	content = """<h3>E - Percentagem de aptos e não aptos por ano:</h3>
 				<li><a href="pagina_indicador_e.html">Página do Indicador</a></li>
 				<p>-aptos-</p>
 				<br></br>"""

@@ -1,11 +1,11 @@
 import re
 
 
-def percetagem_aptos_naptos(file):
+def percentagem_aptos_naptos():
 	dic_aux = {}
 	dic = {}
 
-	with open(file, 'r') as myfile:
+	with open("emd.csv", 'r') as myfile:
 		next(myfile)
 
 		for line in myfile:
@@ -36,12 +36,11 @@ def percetagem_aptos_naptos(file):
 			dic[ano]["aptos"] = 0
 			dic[ano]["inaptos"] = 0
 
-		dic[ano]["aptos"] = dic_aux[ano]["aptos"] / (dic_aux[ano]["aptos"] + dic_aux[ano]["inaptos"]) * 100
-		dic[ano]["inaptos"] = dic_aux[ano]["inaptos"] / (dic_aux[ano]["aptos"] + dic_aux[ano]["inaptos"]) * 100
+		dic[ano]["aptos"] = round(dic_aux[ano]["aptos"] / (dic_aux[ano]["aptos"] + dic_aux[ano]["inaptos"]) * 100, 2)
+		dic[ano]["inaptos"] = round(dic_aux[ano]["inaptos"] / (dic_aux[ano]["aptos"] + dic_aux[ano]["inaptos"]) * 100, 2)
 
 	return dic
 
 
-file = "emd.csv"
-dic = percetagem_aptos_naptos(file)
-print(dic)
+#dic = percetagem_aptos_naptos()
+#print(dic)

@@ -33,21 +33,47 @@ def data_min(datas):
 	return datas[0]
 
 
-def datas_extremas(file):
+def datas_extremas():
 	datas = []
 
-	for line in file:
-		match = re.search(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', line)
+	with open("emd.csv", "r") as file:
+		for line in file:
+			match = re.search(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', line)
 
-		if match:
-			slices = re.split(r'-', match.group())
-			data = (int(slices[0]), int(slices[1]), int(slices[2]))
-			datas.append(data)
+			if match:
+				slices = re.split(r'-', match.group())
+				data = (int(slices[0]), int(slices[1]), int(slices[2]))
+				datas.append(data)
 
-	data_mais_recente = data_max(datas)
-	data_mais_antiga = data_min(datas)
-	
-	
+		data_mais_recente = data_max(datas)
+		data_mais_antiga = data_min(datas)	
 
-file = open("emd.csv", 'r')
-datas_extremas(file)
+		dic = {}
+		dic["data_mais_antiga"] = data_mais_antiga
+		dic["data_mais_recente"] = data_mais_recente
+
+		return dic
+
+
+def ordena_datas_crescente(datas):
+
+	datas.sort(key = lambda x: x[2])
+	datas.sort(key = lambda x: x[1])
+	datas.sort(key = lambda x: x[0])
+
+
+def lista_datas():
+	datas = []
+
+	with open("emd.csv", 'r') as file:
+		for line in file:
+			match = re.search(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', line)
+
+			if match:
+				slices = re.split(r'-', match.group())
+				data = (int(slices[0]), int(slices[1]), int(slices[2]))
+				datas.append(data)
+
+	ordena_datas_crescente(datas)
+
+	return datas
