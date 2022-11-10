@@ -42,5 +42,35 @@ def percentagem_aptos_naptos():
 	return dic
 
 
+def registos_aptos_naptos():
+	dic = {}
+
+	with open("emd.csv", 'r') as file:
+		next(file)
+
+		for line in file:
+			match = re.search(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', line)
+			if match:
+				ano = re.match(r'[0-9]{4}', match.group()).group()
+
+			if ano not in dic.keys():
+				dic[ano] = []
+
+			slices = re.split(r',', line)
+			nome = slices[3] + " " + slices[4]
+			modalidade = slices[8]
+			
+			if re.match(r'(?i:true)', slices[12]):
+				dic[ano].append((nome, modalidade, "Apto"))
+			elif re.match(r'(?i:false)', slices[12]):
+				dic[ano].append((nome, modalidade, "Não Apto"))
+
+	for ano in dic.keys():
+		dic[ano].sort(key = lambda x: x[0])
+		dic[ano].sort(key = lambda x: x[2])
+
+	return dic
+
+
 #dic = percetagem_aptos_naptos()
 #print(dic)

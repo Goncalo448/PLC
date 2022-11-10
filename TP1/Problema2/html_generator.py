@@ -70,8 +70,17 @@ def generate_pagina_indicador(char):
 						<h1>Página do indicador</h1>
 						<body>
 						<li><a href="index.html">Página principal</a></li>
+						-info-
 						</body>
 						</html>"""
+
+			info = c.registos_por_idade_genero()
+			string = "<h3>Registos dos atletas ordenados por idade e por género:</h3><br>"
+
+			for elem in info:
+				string += "<p>Nome: " + elem[0] + "; Género: " + elem[1] + "; Idade: " + elem[2] + ";</p>"
+
+			content = re.sub(r'-info-', string, content)
 
 		elif char == 'd':
 			content ="""<!DOCTYPE html>
@@ -99,8 +108,20 @@ def generate_pagina_indicador(char):
 						<h1>Página do indicador</h1>
 						<body>
 						<li><a href="index.html">Página principal</a></li>
+						-info-
 						</body>
 						</html>"""
+
+			string = "<h3>Registos de aptos e não aptos por ano:</h3><br>"
+			dic = e.registos_aptos_naptos()
+
+			for ano in sorted(dic.keys()):
+				string += "<p>" + ano + "</p>"
+				for elem in dic[ano]:
+					string += "<p>Nome: " + elem[0] + "; " + "Modalidade: " + elem[1] + "; " + elem[2] + ";</p>"
+				string += "<br></br>"
+
+			content = re.sub(r'-info-', string, content)
 
 		file.write(content)
 
@@ -113,9 +134,15 @@ def html_a():
 				<p>datas</p>
 				<br></br>"""
 	dic = a.datas_extremas()
-	dic_in_json = json.dumps(dic)
+	string = "<p>"
 
-	content = re.sub(r'datas', dic_in_json, content)
+	for key in dic.keys():
+		if key == "data_mais_antiga":
+			string += "<p>Data mais antiga: " + str(dic[key][0]) + "-" + str(dic[key][1]) + "-" + str(dic[key][2]) + "</p>"
+		elif key == "data_mais_recente":
+			string += "<p>Data mais recente: " + str(dic[key][0]) + "-" + str(dic[key][1]) + "-" + str(dic[key][2]) + "</p>"
+
+	content = re.sub(r'datas', string, content)
 
 	return content
 
@@ -131,19 +158,17 @@ def html_b():
 
 	dic_por_ano = b.distribuicao_modalidade_ano()
 	dic_total = b.distribuicao_modalidade_total()
-
-	#dic_por_ano_json = json.dumps(dic_por_ano)
-	#dic_total_json = json.dumps(dic_total)
+	
 
 	dic_por_ano_str = ""
-	for ano in dic_por_ano.keys():
+	for ano in sorted(dic_por_ano.keys()):
 		dic_por_ano_str += str(ano) + ":<br>"
-		for modalidade in dic_por_ano[ano].keys():
+		for modalidade in sorted(dic_por_ano[ano].keys()):
 			dic_por_ano_str += modalidade + ": " + str(dic_por_ano[ano][modalidade]) + "; "
 		dic_por_ano_str += "<br></br>"
 
 	dic_total_str = "Total:<br>"
-	for modalidade in dic_total.keys():
+	for modalidade in sorted(dic_total.keys()):
 		dic_total_str += modalidade + ": " + str(dic_total[modalidade]) + "; "
 
 	content = re.sub(r'-ano-', dic_por_ano_str, content)
@@ -157,18 +182,20 @@ def html_c():
 
 	content = """<h3>C - Distribuição por idade e género (para a idade, considera apenas 2 escalões: < 35 anos e >= 35):</h3>
 				<li><a href="pagina_indicador_c.html">Página do Indicador</a></li>
-				<p>-genero-</p>
-				<p>-idade-</p>
+				-info-
 				<br></br>"""
 
 	dic_genero = c.distribuicao_genero()
 	dic_idade = c.distribuicao_idade()
 
-	dic_genero_json = json.dumps(dic_genero)
-	dic_idade_json = json.dumps(dic_idade)
+	string = ""
+	for key in dic_genero.keys():
+		string += "<p>" + key + ": " + str(dic_genero[key]) + "</p>"
 
-	content = re.sub(r'-genero-', dic_genero_json, content)
-	content = re.sub(r'-idade-', dic_idade_json, content)
+	for key in dic_idade.keys():
+		string += "<p>" + key + ": " + str(dic_idade[key]) + "</p>"
+
+	content = re.sub(r'-info-', string, content)
 
 	return content
 
@@ -178,13 +205,17 @@ def html_d():
 
 	content = """<h3>D - Distribuição por morada:</h3>
 				<li><a href="pagina_indicador_d.html">Página do Indicador</a></li>
-				<p>-morada-</p>
+				-info-
 				<br></br>"""
 
 	dic_morada = d.distribuicao_morada()
-	dic_morada_json = json.dumps(dic_morada)
 
-	content = re.sub(r'-morada-', dic_morada_json, content)
+	string = "<p>"
+	for morada in sorted(dic_morada.keys()):
+		string += morada + ": " + str(dic_morada[morada]) + "; "
+	string += "</p>"
+
+	content = re.sub(r'-info-', string, content)
 
 	return content
 
@@ -194,13 +225,23 @@ def html_e():
 
 	content = """<h3>E - Percentagem de aptos e não aptos por ano:</h3>
 				<li><a href="pagina_indicador_e.html">Página do Indicador</a></li>
-				<p>-aptos-</p>
+				-info-
 				<br></br>"""
 
-	dic_aptos_naptos = e.percentagem_aptos_naptos()
-	dic_aptos_naptos_json = json.dumps(dic_aptos_naptos)
+	dic = e.percentagem_aptos_naptos()
+	
+	string = ""
+	for ano in sorted(dic.keys()):
+		string += "<p>" + ano + "</p>"
+		for estado in dic[ano].keys():
+			if estado == "aptos":
+				string += "<p>Aptos: " + str(dic[ano][estado]) + "%</p>"
+			elif estado == "inaptos":
+				string += "<p>Não aptos: " + str(dic[ano][estado]) + "%</p>"
+		string += "<br>"
 
-	content = re.sub(r'-aptos-', dic_aptos_naptos_json, content)
+
+	content = re.sub(r'-info-', string, content)
 
 	return content
 
