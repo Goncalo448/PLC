@@ -1,7 +1,9 @@
 Declaração de variáveis:
-x = int(v); #v é o valor atribuído a x
-a = array(size); #size é o tamanho do array
-a = matrix(rows, cols); #rows é o nº de linhas e cols o nº de colunas
+int x;
+int x = v; #v é o valor atribuído a x
+array[size] a;
+array[size] a = [2,3,4];
+matrix[size][size] m;
 
 
 aritmética:
