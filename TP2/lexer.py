@@ -55,7 +55,7 @@ def t_INT(t):
     return t
 
 def t_NAME(t):
-    r'\w*'
+    r'\w+'
     return t
 
 def t_ARRAY(t):
@@ -153,6 +153,10 @@ def t_THEN(t):
 def t_ELSE(t):
     r'(?i:else)'
     return t
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
 
 t_ignore = ' \t\r\n'
 
