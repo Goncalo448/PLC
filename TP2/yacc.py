@@ -1,16 +1,19 @@
 import ply.yacc as yacc
-from lexer import *
+from lexer import tokens
+from lexer import lexer_build
 import sys
 
 
+start = 'Program'
+
 def p_Program(p):
-    'Program : Declarations Body'
-    p[0] = p[1] + "START\n" + p[2] + "STOP\n"
-
-
-def p_Program_noDeclarations(p):
     'Program : Body'
     p[0] = "START\n" + p[1] + "STOP\n"
+
+
+def p_Program_Declarations(p):
+    'Program : Declarations Body'
+    p[0] = p[1] + "START\n" + p[2] + "STOP\n"
 
 
 def p_Declarations_single(p):
@@ -19,7 +22,7 @@ def p_Declarations_single(p):
 
 
 def p_Declarations_multiple(p):
-    'Declarations : Declaration Declarations'
+    'Declarations : Declarations Declaration'
     p[0] = p[1] + p[2]
 
 
@@ -65,7 +68,7 @@ def p_Body_single(p):
 
 
 def p_Body_multiple(p):
-    'Body : Process Body'
+    'Body : Body Process'
     p[0] = p[1] + p[2]
 
 
@@ -346,10 +349,12 @@ def p_error(p):
 
 
 def build_parser():
+    lexer_build()
     parser = yacc.yacc()
     parser.fp = dict()
     parser.labels = 0
     parser.gp = 0
 
+    print(parser.fp)
     return parser
 
