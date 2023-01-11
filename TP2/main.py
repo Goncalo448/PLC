@@ -8,7 +8,6 @@ if len(sys.argv) > 1:
     with open(sys.argv[1], 'r') as file:
         assembly = parser.parse(file.read())
         if assembly:
-            print(assembly)
             
             if len(sys.argv) > 2:
                 with open(sys.argv[2], 'w') as output:
@@ -18,3 +17,8 @@ if len(sys.argv) > 1:
                 print(f"{sys.argv[1]} compiled successfully!")
         else:
             print("Empty!")
+else:
+    line = input(">")
+    while line!="\n":
+        print(parser.parse(line))
+        line = input(">")

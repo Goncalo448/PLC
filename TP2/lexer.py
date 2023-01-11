@@ -25,46 +25,40 @@ reserved = {
     'do' : 'DO',
     'if' : 'IF',
     'then' : 'THEN',
-    'else' : 'ELSE'
+    'else' : 'ELSE',
+    'close' : 'CLOSE'
 }
 
 
 tokens = [
         'NUM',
-        'NAME',
-        'ATRIB',
-        'LPAREN',
-        'RPAREN',
-        'LBRACKET',
-        'RBRACKET',
-        'COMMA',
-        'DOTCOMMA'
+        'NAME'
 ] + list(reserved.values())
 
 
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
-t_LBRACKET = r'\['
-t_RBRACKET = r'\]'
-t_COMMA = r'\,'
-t_DOTCOMMA = r'\;'
+literals = ['=', '(', ')', '[', ']', ';', ',']
 
 
 def t_NUM(t):
     r'\d+'
+    t.type = "NUM"
     return t
 
-def t_NAME(t):
-    r'[a-z]+\w*'
+
+def t_ID(t):
+    r'[a-zA-Z]+'
+    t.type = reserved.get(t.value, 'NAME')
     return t
 
-def t_ATRIB(t):
-    r'\='
-    return t
 
-def t_newline(t):
+'''def t_NAME(t):
+    r'[a-z]+'
+    t.type = "NAME"
+    return t'''
+
+'''def t_newline(t):
     r'\n+'
-    t.lexer.lineno += len(t.value)
+    t.lexer.lineno += len(t.value)'''
 
 t_ignore = ' \t\r\n'
 
@@ -76,3 +70,6 @@ def t_error(t):
 def lexer_build():
     lexer = lex.lex()
     return lexer
+
+
+lexer = lex.lex()
