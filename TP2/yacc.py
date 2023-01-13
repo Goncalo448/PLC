@@ -355,7 +355,6 @@ def p_Var_Matrix(p):
 
 def p_error(p):
     print(f"Syntax error: token {p.value} on line {p.lineno}.")
-    print(p)
 
 
 def build_parser():

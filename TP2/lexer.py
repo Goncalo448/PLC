@@ -49,18 +49,13 @@ def t_ID(t):
     r'[a-zA-Z]+'
     t.type = reserved.get(t.value, 'NAME')
     return t
+    
 
-
-'''def t_NAME(t):
-    r'[a-z]+'
-    t.type = "NAME"
-    return t'''
-
-'''def t_newline(t):
+def t_newline(t):
     r'\n+'
-    t.lexer.lineno += len(t.value)'''
+    t.lexer.lineno += len(t.value)
 
-t_ignore = ' \t\r\n'
+t_ignore = ' \t\r'
 
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
@@ -71,5 +66,3 @@ def lexer_build():
     lexer = lex.lex()
     return lexer
 
-
-lexer = lex.lex()
